@@ -4,10 +4,7 @@ pipeline {
     stages {
         stage('Execute Command') {
             steps {
-                script {
-                    // Ejecuta el comando echo
-                    sh 'echo "Hello, Jenkins!"'
-                }
+                bat 'echo Hello, Jenkins!'
             }
         }
     }

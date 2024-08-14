@@ -72,9 +72,9 @@ pipeline {
                         def bpReleasePath = "C:/Users/User/AppData/Local/Jenkins/.jenkins/workspace/BPTest_development/Release/Suma.bprelease"
                         def bluePrismPath = 'C:\\Program Files\\Blue Prism Limited\\Blue Prism Automate\\automatec.exe'
 
-                        bat """
-                        copy "${bpProcessPath}" "C:/Users/User/AppData/Local/Jenkins/.jenkins/workspace/BPTest_development/Process/${newProcessName}"
-                        copy "${bpReleasePath}" "C:/Users/User/AppData/Local/Jenkins/.jenkins/workspace/BPTest_development/Release/${newReleaseName}"
+                        powershell """
+                        Copy-Item -Path "${bpProcessPath}" -Destination "C:/Users/User/AppData/Local/Jenkins/.jenkins/workspace/BPTest_development/Process/${newProcessName}" -Force
+                        Copy-Item -Path "${bpReleasePath}" -Destination "C:/Users/User/AppData/Local/Jenkins/.jenkins/workspace/BPTest_development/Release/${newReleaseName}" -Force
                         """
                         
                         def processPathQA = "C:/Users/User/AppData/Local/Jenkins/.jenkins/workspace/BPTest_development/Process/${newProcessName}"

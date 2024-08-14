@@ -60,12 +60,12 @@ pipeline {
             }
         }
         
-        stage('Import to Blue Prism') {
+        stage('Deploy QA') {
             steps {
                 node('local-agent') { // El agente de Jenkins que se ejecuta en tu máquina local
                     script {
-                        def bpProcessPath = "${env.WORKSPACE}/Process/Suma.bpprocess"
-                        def bpReleasePath = "${env.WORKSPACE}/Release/Suma.bprelease"
+                        def bpProcessPath = "C:/Users/User/AppData/Local/Jenkins/.jenkins/workspace/BPTest_development/Process/Suma.bpprocess"
+                        def bpReleasePath = "C:/Users/User/AppData/Local/Jenkins/.jenkins/workspace/BPTest_development/Release/Suma.bprelease"
                         def bluePrismPath = 'C:\\Program Files\\Blue Prism Limited\\Blue Prism Automate\\automatec.exe'
                         
                         // Importar Suma.bpprocess
@@ -77,7 +77,7 @@ pipeline {
                         // Importar Suma.bprelease
                         bat """
                         cd "C:\\Program Files\\Blue Prism Limited\\Blue Prism Automate"
-                        automatec.exe /import "${bpReleasePath}" /user admin Devops2024
+                        automatec.exe /importrelease "${bpReleasePath}" /user admin Devops2024
                         """
                     }
                 }

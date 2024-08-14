@@ -1,5 +1,5 @@
 pipeline {
-    agent any  // Indica que el pipeline puede ejecutarse en cualquier agente disponible
+    agent any
 
     stages {
         stage('Execute Command') {
@@ -9,23 +9,24 @@ pipeline {
         }
 
         stage('Prepare bpprocess') {
-            when {                            
+            when {
                 anyOf {
                     branch 'development'
-                    branch 'feature/*'                                                
+                    branch 'feature/*'
                 }
             }
-            steps {   
+            steps {
                 script {
                     // Usando PowerShell para extraer la versión del archivo .bprelease
+                    def workspace = env.WORKSPACE
                     def version = powershell(
                         returnStdout: true,
-                        script: '''
-                        $filePath = "C:/Users/User/Documents/RPA/BP/blueprism/Suma.bprelease"
-                        [xml]$xml = Get-Content $filePath
-                        $version = $xml.SelectSingleNode("//Version").InnerText
-                        Write-Output $version
-                        '''
+                        script: """
+                        \$filePath = "${workspace}/Process/Suma.bprelease"
+                        [xml]\$xml = Get-Content \$filePath
+                        \$version = \$xml.SelectSingleNode("//Version").InnerText
+                        Write-Output \$version
+                        """
                     ).trim()
                     echo "La versión del proceso de Blue Prism es: ${version}"
                 }

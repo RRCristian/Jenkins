@@ -1,10 +1,6 @@
 pipeline {
     agent any  // Indica que el pipeline puede ejecutarse en cualquier agente disponible
 
-    environment {
-        
-    }
-
     stages {
         stage('Execute Command') {
             steps {
@@ -12,16 +8,15 @@ pipeline {
             }
         }
 
-        stage('Prepare bpprocess'){
-            when{                            
-                anyOf{
+        stage('Prepare bpprocess') {
+            when {                            
+                anyOf {
                     branch 'development'
                     branch 'feature/*'                                                
                 }
-                
             }
-            step{   
-                 script {
+            steps {   
+                script {
                     // Usando PowerShell para extraer la versión del archivo .bprelease
                     def version = powershell(
                         returnStdout: true,
@@ -33,10 +28,8 @@ pipeline {
                         '''
                     ).trim()
                     echo "La versión del proceso de Blue Prism es: ${version}"
-                 }    
+                }
             }
         }
-
-
     }
 }

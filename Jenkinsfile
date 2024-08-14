@@ -22,7 +22,7 @@ pipeline {
                     def version = powershell(
                         returnStdout: true,
                         script: """
-                        \$filePath = "${workspace}/Process/Suma.bprelease"
+                        \$filePath = "${workspace}/Process/Suma.bpprocess"
                         [xml]\$xml = Get-Content \$filePath
                         \$version = \$xml.SelectSingleNode("//Version").InnerText
                         Write-Output \$version

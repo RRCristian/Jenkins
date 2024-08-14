@@ -60,24 +60,36 @@ pipeline {
             }
         }
         
-        stage('Deploy QA') {
+        stage('Deploy to QA') {
             steps {
                 node('local-agent') { // El agente de Jenkins que se ejecuta en tu máquina local
                     script {
+
+                        def newProcessName = 'Suma-QA.bpprocess'
+                        def newReleaseName = 'Suma-QA.bprelease'
+
                         def bpProcessPath = "C:/Users/User/AppData/Local/Jenkins/.jenkins/workspace/BPTest_development/Process/Suma.bpprocess"
                         def bpReleasePath = "C:/Users/User/AppData/Local/Jenkins/.jenkins/workspace/BPTest_development/Release/Suma.bprelease"
                         def bluePrismPath = 'C:\\Program Files\\Blue Prism Limited\\Blue Prism Automate\\automatec.exe'
+
+                        bat """
+                        copy "${bpProcessPath}" "C:/Users/User/AppData/Local/Jenkins/.jenkins/workspace/BPTest_development/Process/${newProcessName}"
+                        copy "${bpReleasePath}" "C:/Users/User/AppData/Local/Jenkins/.jenkins/workspace/BPTest_development/Release/${newReleaseName}"
+                        """
                         
+                        def processPathQA = "C:/Users/User/AppData/Local/Jenkins/.jenkins/workspace/BPTest_development/Process/${newProcessName}"
+                        def releasePathQA = "C:/Users/User/AppData/Local/Jenkins/.jenkins/workspace/BPTest_development/Release/${newReleaseName}"
+
                         // Importar Suma.bpprocess
                         bat """
                         cd "C:\\Program Files\\Blue Prism Limited\\Blue Prism Automate"
-                        automatec.exe /import "${bpProcessPath}" /user admin Devops2024 /forceid new
+                        automatec.exe /import "${processPathQA}" /user admin Devops2024
                         """
                         
                         // Importar Suma.bprelease
                         bat """
                         cd "C:\\Program Files\\Blue Prism Limited\\Blue Prism Automate"
-                        automatec.exe /importrelease "${bpReleasePath}" /user admin Devops2024 /forceid new
+                        automatec.exe /importrelease "${releasePathQA}" /user admin Devops2024
                         """
                     }
                 }

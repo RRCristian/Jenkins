@@ -30,13 +30,9 @@ pipeline {
                             exit 1
                         }
 
-                        # Mostrar el contenido del archivo
-                        \$content = Get-Content \$filePath
-                        Write-Output "Contenido del archivo: \$content"
-
                         # Leer el XML y extraer la versión
                         [xml]\$xml = Get-Content \$filePath
-                        \$version = \$xml.SelectSingleNode("//Version").InnerText
+                        \$version = \$xml.process.version
                         Write-Output \$version
                         """
                     ).trim()

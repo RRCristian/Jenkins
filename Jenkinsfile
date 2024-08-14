@@ -1,10 +1,14 @@
 pipeline {
     agent any  // Indica que el pipeline puede ejecutarse en cualquier agente disponible
 
+    environment {
+        
+    }
+
     stages {
         stage('Execute Command') {
             steps {
-                bat 'echo Hello, Jenkins!'
+                bat 'echo Hello EY - COE DevOps'
             }
         }
 
@@ -22,13 +26,14 @@ pipeline {
                     def version = powershell(
                         returnStdout: true,
                         script: '''
-                        $filePath = "ruta/al/archivo.bprelease"
+                        $filePath = "C:/Users/User/Documents/RPA/BP/blueprism/Suma.bprelease"
                         [xml]$xml = Get-Content $filePath
                         $version = $xml.SelectSingleNode("//Version").InnerText
                         Write-Output $version
                         '''
                     ).trim()
                     echo "La versión del proceso de Blue Prism es: ${version}"
+                 }    
             }
         }
 

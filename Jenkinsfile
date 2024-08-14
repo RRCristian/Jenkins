@@ -72,8 +72,8 @@ pipeline {
                 node('local-agent') { // El agente de Jenkins que se ejecuta en tu máquina local
                     script {
 
-                        def newProcessName = 'Suma-DEV.bpprocess'
-                        def newReleaseName = 'Suma-DEV.bprelease'
+                        def newProcessName = 'Suma.bpprocess'
+                        def newReleaseName = 'Suma.bprelease'
 
                         def bpProcessPath = "C:/Users/User/AppData/Local/Jenkins/.jenkins/workspace/BPTest_development/Process/Suma.bpprocess"
                         def bpReleasePath = "C:/Users/User/AppData/Local/Jenkins/.jenkins/workspace/BPTest_development/Release/Suma.bprelease"

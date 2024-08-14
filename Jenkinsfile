@@ -8,7 +8,7 @@ pipeline {
             }
         }
 
-        stage('Prepare bpprocess') {
+        stage('Prepare bpprocess and bprelease') {
             when {
                 anyOf {
                     branch 'development'
@@ -17,26 +17,69 @@ pipeline {
             }
             steps {
                 script {
-                    // Usando PowerShell para extraer la versión del archivo .bprelease
                     def workspace = env.WORKSPACE
-                    def version = powershell(
+                    
+                    // Obtener la versión de Suma.bpprocess
+                    def bpprocessVersion = powershell(
                         returnStdout: true,
                         script: """
                         \$filePath = "${workspace}/Process/Suma.bpprocess"
                         
-                        # Verificar que el archivo existe
                         if (-Not (Test-Path \$filePath)) {
                             Write-Output "Archivo no encontrado: \$filePath"
                             exit 1
                         }
 
-                        # Leer el XML y extraer la versión
                         [xml]\$xml = Get-Content \$filePath
                         \$version = \$xml.process.version
                         Write-Output \$version
                         """
                     ).trim()
-                    echo "La versión del proceso de Blue Prism es: ${version}"
+                    
+                    echo "La versión del proceso de Blue Prism (Suma.bpprocess) es: ${bpprocessVersion}"
+                    
+                    // Obtener la versión de Suma.bprelease
+                    def bpreleaseVersion = powershell(
+                        returnStdout: true,
+                        script: """
+                        \$filePath = "${workspace}/Release/Suma.bprelease"
+                        
+                        if (-Not (Test-Path \$filePath)) {
+                            Write-Output "Archivo no encontrado: \$filePath"
+                            exit 1
+                        }
+
+                        [xml]\$xml = Get-Content \$filePath
+                        \$version = \$xml.bpRelease.version
+                        Write-Output \$version
+                        """
+                    ).trim()
+                    
+                    echo "La versión del release de Blue Prism (Suma.bprelease) es: ${bpreleaseVersion}"
+                }
+            }
+        }
+        
+        stage('Import to Blue Prism') {
+            steps {
+                node('local-agent') { // El agente de Jenkins que se ejecuta en tu máquina local
+                    script {
+                        def bpProcessPath = "${env.WORKSPACE}/Process/Suma.bpprocess"
+                        def bpReleasePath = "${env.WORKSPACE}/Release/Suma.bprelease"
+                        def bluePrismPath = 'C:\\Program Files\\Blue Prism Limited\\Blue Prism Automate\\automatec.exe'
+                        
+                        // Importar Suma.bpprocess
+                        bat """
+                        cd "C:\\Program Files\\Blue Prism Limited\\Blue Prism Automate"
+                        automatec.exe /import "${bpProcessPath}" /user admin Devops2024
+                        """
+                        
+                        // Importar Suma.bprelease
+                        bat """
+                        cd "C:\\Program Files\\Blue Prism Limited\\Blue Prism Automate"
+                        automatec.exe /import "${bpReleasePath}" /user admin Devops2024
+                        """
+                    }
                 }
             }
         }

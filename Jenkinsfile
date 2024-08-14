@@ -83,13 +83,13 @@ pipeline {
                         // Importar Suma.bpprocess
                         bat """
                         cd "C:\\Program Files\\Blue Prism Limited\\Blue Prism Automate"
-                        automatec.exe /import "${processPathQA}" /user admin Devops2024
+                        automatec.exe /import "${processPathQA}" /user admin Devops2024 /overwrite
                         """
                         
                         // Importar Suma.bprelease
                         bat """
                         cd "C:\\Program Files\\Blue Prism Limited\\Blue Prism Automate"
-                        automatec.exe /importrelease "${releasePathQA}" /user admin Devops2024
+                        automatec.exe /importrelease "${releasePathQA}" /user admin Devops2024 /overwrite
                         """
                     }
                 }
